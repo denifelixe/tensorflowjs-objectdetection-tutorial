@@ -5,9 +5,9 @@ class App extends React.Component {
 
   // we are gonna use inline style
   styles = {
-    position: 'fixed',
-    top: 150,
-    left: 150,
+    // position: 'fixed',
+    // top: 150,
+    // left: 150,
   };
 
 
@@ -98,7 +98,7 @@ class App extends React.Component {
   // so we are in someway drawing our video "on the go"
   render() {
     return (
-      <div> 
+      <div style={{ position: 'relative' }}> 
         <video
           style={this.styles}
           autoPlay
@@ -108,7 +108,8 @@ class App extends React.Component {
           width="720"
           height="600"
         />
-        <canvas style={this.styles} ref={this.canvasRef} width="720" height="650" />
+        {/* <canvas style={this.styles} ref={this.canvasRef} width="720" height="650" /> */}
+        <canvas style={{ position: 'absolute', top: 0, left: '50%', WebkitTransform: 'translateX(-50%)', transform: 'translateX(-50%)' }} ref={this.canvasRef} width="720" height="650" />
       </div>
     );
   }
