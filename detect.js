@@ -12,6 +12,7 @@ class App extends React.Component {
 
 
   detectFromVideoFrame = (model, video) => {
+    console.log('detect function')
     model.detect(video).then(predictions => {
       this.showDetections(predictions);
 
@@ -19,8 +20,8 @@ class App extends React.Component {
         this.detectFromVideoFrame(model, video);
       });
     }, (error) => {
-      console.log("Couldn't start the webcam")
-      console.error(error)
+      console.log("Couldn't start the webcam");
+      console.error(error);
     });
   };
 
@@ -38,7 +39,7 @@ class App extends React.Component {
       const height = prediction.bbox[3];
       // Draw the bounding box.
       ctx.strokeStyle = "#2fff00";
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 10;
       ctx.strokeRect(x, y, width, height);
       // Draw the label background.
       ctx.fillStyle = "#2fff00";
@@ -58,13 +59,15 @@ class App extends React.Component {
 
   componentDidMount() {
     if (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia) {
+      console.log(navigator.mediaDevices);
       // define a Promise that'll be used to load the webcam and read its frames
       const webcamPromise = navigator.mediaDevices
         .getUserMedia({
-          video: true,
+          video: { facingMode: "environment" },
           audio: false,
         })
         .then(stream => {
+          console.log('initiate stream');
           // pass the current frame to the window.stream
           window.stream = stream;
           // pass the stream to the videoRef
@@ -76,7 +79,8 @@ class App extends React.Component {
             };
           });
         }, (error) => {
-          console.log("Couldn't start the webcam")
+          // console.log("Couldn't start the webcam")
+          alert("Couldn't start the webcam");
           console.error(error)
         });
 
@@ -86,6 +90,7 @@ class App extends React.Component {
       // resolve all the Promises
       Promise.all([loadlModelPromise, webcamPromise])
         .then(values => {
+          console.log('resolve all promises');
           this.detectFromVideoFrame(values[0], this.videoRef.current);
         })
         .catch(error => {
@@ -105,11 +110,11 @@ class App extends React.Component {
           muted
           playsInline
           ref={this.videoRef}
-          width="720"
-          height="600"
+          width="1280"
+          height="720"
         />
         {/* <canvas style={this.styles} ref={this.canvasRef} width="720" height="650" /> */}
-        <canvas style={{ position: 'absolute', top: 0, left: '50%', WebkitTransform: 'translateX(-50%)', transform: 'translateX(-50%)' }} ref={this.canvasRef} width="720" height="650" />
+        <canvas style={{ position: 'absolute', top: 0, left: '50%', WebkitTransform: 'translateX(-50%)', transform: 'translateX(-50%)' }} ref={this.canvasRef} width="1280" height="720" />
       </div>
     );
   }
